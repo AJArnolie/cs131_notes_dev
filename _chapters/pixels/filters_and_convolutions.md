@@ -55,7 +55,7 @@ However, we typically only consider a finite region within this matrix for a spe
 
 Furthermore, we can plot images as a surface, such as the one shown below. The 2D plane indicates the coordinates of the images, and the vertical height indicates the intensity of each pixel.
 
-![](https://i.imgur.com/GHci7zw.png)
+![](https://i.imgur.com/GHci7zw.png =x150)
 
 ### Overview of Filtering
 
