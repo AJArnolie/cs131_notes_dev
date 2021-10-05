@@ -53,11 +53,9 @@ $$\begin{bmatrix}
 
 However, we typically only consider a finite region within this matrix for a specific image. That is, defined over a rectangle with a finite range, the function representation of a grayscale image is: $f: [a,b] \times [c,d] \rightarrow [0,255]$, where $[a,b] \times [c,d]$ is the domain support which defines the range of valid inputs to $f$. Concretely, $[a,b]$ specify the horizontal range of the image, and $[c,d]$ the vertical range. 
 
-Furthermore, we can plot images as a surface, such as the one shown below. The 2D plane indicates the coordinates of the images, and the vertical height indicates the intensity of each pixel.
+Furthermore, we can plot images as a surface, such as the one shown below. The 2D plane indicates the coordinates of the images, and the vertical height indicates the intensity of each pixel1.
 
-<p align="center">
- <img src="https://i.imgur.com/GHci7zw.png" width="1000" />
-</p>
+<img src="https://i.imgur.com/GHci7zw.png" width="1000" />
 
 ### Overview of Filtering
 
