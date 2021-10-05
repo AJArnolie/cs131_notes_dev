@@ -4,6 +4,8 @@ keywords: (insert comma-separated keywords here)
 order: 3 # Lecture number for 2020
 ---
 
+# CS 131 Lecture 3 Notes: Filters and Convolutions
+
 **Authors:** AJ Arnolie, Andy Jin, Cynthia Liu, Edward Park, Daulet Tuleubayev, Jerry Wei
 
 ## Contents
@@ -29,13 +31,13 @@ order: 3 # Lecture number for 2020
 
 ### Images as Functions
 
-Because images are digital, they are typically represented discretely as a 2D matrix of integer values which capture pixel intensity. Concretely, an image is represented as a function $f: \mathbb{R}^2 \rightarrow \mathbb{R}^M$, wherein $f[x,y]$ gives the intensity of the pixel at position $[x,y]$. For a grayscale image, the pixel intensity is an integer in the range $[0,255]$. For a color image,\
+Because images are digital, they are typically represented discretely as a 2D matrix of integer values which capture pixel intensity. Concretely, an image is represented as a function $f: \mathbb{R}^2 \rightarrow \mathbb{R}^M$, wherein $f[x,y]$ gives the intensity of the pixel at position $[x,y]$. For a grayscale image, the pixel intensity is an integer in the range $[0,255]$. For a color image, 
 
 $$f[x,y] = \begin{bmatrix}
     r[x,y] \\
     g[x,y] \\
     b[x,y]
-\end{bmatrix}$$\ 
+\end{bmatrix}$$ 
 
 such that $r, g, b: [a,b] \times [c,d] \rightarrow [0,255]$.
 
@@ -60,6 +62,7 @@ Furthermore, we can plot images as a surface, such as the one shown below. The 2
 The term **filtering** refers to the process by which a new image is formed by transforming pixel values of an original image. Filtering serves to extract useful information from images, such as edges, corners, blobs, or to modify and enhance certain image properties (e.g., super-resolution, in-painting, de-noising).
 
 A **system**, denoted by system operator $\mathcal{S}$, converts an input function $f[n,m]$ into an output function $g[n,m]$, where $[n,m]$ are the independent variables (e.g., position in the image): 
+
 $$f[n,m] \rightarrow \boxed{\text{System } \mathcal{S}} \rightarrow g[n,m]$$
 
 Below are several equivalent notations to define a system transforming input $f$ into output $g$:
@@ -70,6 +73,7 @@ Below are several equivalent notations to define a system transforming input $f$
 ### Moving Average Filter
 
 The moving average filter sets the output pixel value to be the average of its neighboring pixel values. For instance, a $3 \times 3$ moving average filter will set the pixel at position $[n,m]$ of the output image, $g$, to be:
+
 $$g[n,m] = \frac{1}{9} \sum\limits_{k=n-1}^{n+1}\sum\limits_{l=m-1}^{m+1} f[k, l]$$
 
 The outer summation sums over the rows and the inner summation sums over the columns. Using change of variables, this can be simplified to:
@@ -82,7 +86,9 @@ The moving average filter has the visual effect of slightly blurring the image; 
 
 #### Filter Mask
 
-Another way to think of the moving average filter is in terms applying the following moving average filter "kernel" or "mask" at every neighborhood of the input image, $f$, to compute $g$: $$h = \frac{1}{9} \begin{bmatrix}
+Another way to think of the moving average filter is in terms applying the following moving average filter "kernel" or "mask" at every neighborhood of the input image, $f$, to compute $g$: 
+
+$$h = \frac{1}{9} \begin{bmatrix}
     1 & 1 & 1 \\
     1 & 1 & 1 \\
     1 & 1 & 1
@@ -107,9 +113,9 @@ This image segmentation filter has the visual effect of transforming the image i
 ## 2. Properties of Linear Systems
 
 
-#### Systems can be classified based on their properties
+#### Systems can be Classified Based on their Properties
 
-Filters can be quite different in how they are computed and how they affect images. So how might we best categorize these different systems? There are both amplitude and spatial properties that systems are classified upon.
+Filters can be quite different in how they are computed and how they affect images. So, how might we best categorize these different systems? There are both amplitude and spatial properties that systems are classified upon.
 
 Some amplitude properties include:
 * Additivity
@@ -123,9 +129,9 @@ Spatial properties include:
 * **Shift invariance**
 * Memory
 
-There are two key categories that we focus on: **shift invariance** and **superposition**.
+There are two key categories that we focus on: **Shift Invariance** and **Superposition**.
 
-### Shift-Invariant (LSI) Systems
+### Shift-Invariant (SI) Systems
 
 Given that $f[n,m] \xrightarrow[]{S} g[n,m]$, $S$ is shift-invariant if:
 
@@ -158,9 +164,9 @@ In other words, passing through a linear combination of two images through $S$, 
 
 Given this definition, we know that the moving average system is a linear system, while thresholding is not.
 
-Furthermore, we can define a linear shift invariant (LSI) system as a system that is shift invariant and follows the superposition property.
+Furthermore, we can define a Linear Shift-Invariant (LSI) system as a system that is both Shift-Invariant and follows the **Superposition Property**.
 
-Additionally and critically, an LSI System is completely specified by its impulse response. The following section will discuss exactly what this statement means and how it is relevant in understanding how LSI Systems interact with images.
+Additionally and critically, an LSI System is _completely specified by its impulse response_. The following section will discuss exactly what this statement means and how it is relevant in understanding how LSI Systems interact with images.
 
 ## 3. LSI Systems and Convolution
 
@@ -190,11 +196,16 @@ $$\delta_2[n,m] \rightarrow \boxed{\text{System } \mathcal{S}} \rightarrow h[n,m
 
 This conversion from impulse function to impulse response can be better understood using the Moving Average Filter example introduced previously:
 
-Consider the 2D Delta ($\delta_2$) impulse function defined above. Here, we would like to find the impulse response corresponding to that impulse function. Applying the concept of kernels discussed previously, we can repurpose the equation used for the 3x3 Moving Average Filter to find an expression that represents the impulse response $h$.
+Consider the 2D Delta ($\delta_2$) impulse function defined above. Here, we would like to find the impulse response corresponding to that impulse function. Recall that the expression used to represent the Moving Average Filter is as follows:
+
+$$g[n,m] = \frac{1}{9} \sum\limits_{k=-1}^{1}\sum\limits_{l=-1}^{1} f[n-k, m-l]$$
+
+We can repurpose this equation, replacing the input image $f$ with the $\delta_2$ function to generate an expression for the impulse response $h$ corresponding to the Moving Average Filter:
 
 $$\delta_2[n,m] \overset{\mathcal{S}}\rightarrow h[n,m] = \frac{1}{9} \sum\limits_{k=-1}^{1}\sum\limits_{l=-1}^{1} \delta_2[n-k, m-l]$$
 
 Running this function for each pixel in the input image, we get an impulse response $h$ of the following form:
+
 $$\begin{bmatrix}
     0&0&0&0&0 \\
     0& \frac{1}{9} & \frac{1}{9} & \frac{1}{9}&0 \\
@@ -203,7 +214,7 @@ $$\begin{bmatrix}
          0& 0& 0 &0 & 0
 \end{bmatrix}$$
 
-If this looks familiar, it is because this impulse response output $h$ is identical to the Moving Average filter discussed previously. Therefore, passing a $\delta_2$ impulse function into an LSI System produces a Moving Average filter that can be used for smoothing.
+If this looks familiar, it is because this impulse response output $h$ is identical to the Moving Average filter discussed previously. Therefore, passing a $\delta_2$ impulse function into this LSI System produces a Moving Average filter that can be used for smoothing.
 
 As stated earlier, _an LSI System can be completely specified by its impulse response_. This means that the impulse response produced by passing some impulse function through an LSI system can be used to predict what a system's output image will look like. This statement also indicates that, given an input image and an impulse response for an LSI System, we can actually use this information to generate the corresponding output image.
 
@@ -214,6 +225,7 @@ Convolution is an operation that describes the output of an LSI System, a specif
 We discussed how the concept of a kernel might be used to apply a filter to an image using the _Moving Average Filter_ example, but now that we understand the concept of impulse functions and impulse responses, we can generalize this process to an arbirary impulse response $h$.
 
 We know that LSI Systems satisfy the **Superposition Property** and the **Shift-Invariance Property**. Additionally, we have just discussed that:
+
 $$\delta_2[n,m] \overset{\mathcal{S}}\rightarrow h[n,m]$$
 
 Using these three properties, we can derive an equation that describes an output image $g$ produced by an LSI system solely in terms of an input image $f$ and a kernel $h$. 
@@ -223,47 +235,57 @@ In order to do so, we must first imagine the input image $f$ as a sum of impulse
 ![](https://i.imgur.com/QQuILc2.png[/img])
 \
 \begin{align}
-f[n,m] &= f[0,0] \cdot\delta_2[n,m] + f[0,1] \cdot\delta_2[n,m-1] + ... + f[2,2] \cdot\delta_2[n-2,m-2]\\
+f[n,m] &= f[0,0] \cdot\delta_2[n,m] + f[0,1] \cdot\delta_2[n,m-1] + ... + f[2,2] \cdot\delta_2[n-2,m-2]\\\\
 &= \sum_{k=-\infty}^\infty\sum_{l=-\infty}^\infty f[k,l]\cdot \delta_2[n-k,m-l]\\
 \end{align}
 
 Now that we have described the input image as a sum of scaled and shifted $\delta_2$ functions, we can use this new representation for our image along with the previously defined properties to derive an equation for the output image in terms of $f[n,m]$ and $h[n,m]$.
 
 First, we know the following to be true:
+
 $$f[n,m] \overset{\mathcal{S}}\rightarrow g[n,m]\\
 f[n,m] =\sum_{k=-\infty}^\infty\sum_{l=-\infty}^\infty f[k,l]\cdot \delta_2[n-k,m-l]$$
+
 Therefore we can conclude that:
+
 $$g[n,m]=S\{\sum_{k=-\infty}^\infty\sum_{l=-\infty}^\infty f[k,l]\cdot \delta_2[n-k,m-l]\}$$
+
 Next, by applying the Superposition Property, in which we treat the $f[k,l]$ terms as constants and only apply the _System_ to the shifted $\delta_2$ functions, we get the following:
+
 $$g[n,m]=\sum_{k=-\infty}^\infty\sum_{l=-\infty}^\infty f[k,l]\cdot S\{\delta_2[n-k,m-l]\}$$
+
 Finally, we use our knowledge that $\delta_2[n,m] \overset{\mathcal{S}}\rightarrow h[n,m]$, and we apply the Shift-Invariance Property, which allows us to write the equation as follows:
+
 $$f[n,m] * h[n,m]= (f*h)[n,m] = g[n,m]=\sum_{k=-\infty}^\infty\sum_{l=-\infty}^\infty f[k,l]\cdot h[n-k,m-l]$$
 
 This operation is referred to as **2D discrete convolution** and can also be represented by $f[n,m] * h[n,m]$ or $(f * h)[m,n]$. In the case of the equation above, we can say that the function $f$ is being convolved with the kernel $h$.
 
 
-## 2. Convolution and correlation
+## 4. Convolution and Correlation
 
 ### 2D Discrete Convolution
 In computer vision, most of the time we use convolution with 2D discrete signal. The equation of 2D discrete convolution is defined as:
+
 $$f[n,m] * h[n,m] = \sum\limits_{k=-\infty}^{\infty} \sum\limits_{l=-\infty}^{\infty} f[k, l] h[n-k, m-l]$$
 
-The meaning of the equation also can be explained graphically. When we want to compute the convolution at location $(n, m)$, we need the input image $f$ as well as the impulse response $h$ which is exactly the  kernel mentioned in previous classes.
-![](https://i.imgur.com/M1aSURj.png)
+The meaning of the equation also can be explained graphically. When we want to compute the convolution at location (n, m), we need the input image $f$ as well as the impulse response $h$ which is exactly the  kernel mentioned in previous classes.
+![](https://i.imgur.com/sdWgUmz.png)
 
 The following is the algorithm of computing convolution for 2D discrete values:
 1. To compute the convolution, first, we fold the kernel $h[k, l]$ to let the indexes become negative as $h[-k, -l]$. In other words, we flip the kernel both vertically and horizontally to form $h[-k, -l]$.
-![](https://i.imgur.com/TW7mR1K.png)
+![](https://i.imgur.com/Pd3JlWg.png)
+
+2. We shift the folded kernel by (n, m) to obtain $h[n-k, m-l]$ and make all the values outside the kernel be zero. 
+![](https://i.imgur.com/TPjmLYV.png)
 
 
-2. We shift the folded kernel by $(n, m)$ to obtain $h[n-k, m-l]$ and make all the values outside the kernel be zero. 
-![](https://i.imgur.com/UizMxzd.png)
 
 
 3. After that, we can multiply $h[n-k, m-l]$ by $f[k, l]$, which is overlapping the kernel and original input and then performing element-wise multiplication between the original input and the kernel in the cells within the neighborhood.
-![](https://i.imgur.com/gliWgou.png)
+![](https://i.imgur.com/zfgCLrg.png)
 
-4. We sum up all the results to obtain the output value at $(n, m)$.
+
+4. We sum up all the results to obtain the output value at (n, m).
 
 ### Examples of Simple Convolutions on an Image
 Let's look at a few basic examples of multiplying a kernel with an actual image. 
