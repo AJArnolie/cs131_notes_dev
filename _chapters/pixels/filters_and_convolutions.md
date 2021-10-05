@@ -29,12 +29,15 @@ order: 3 # Lecture number for 2020
 
 ### Images as Functions
 
-Because images are digital, they are typically represented discretely as a 2D matrix of integer values which capture pixel intensity. Concretely, an image is represented as a function $f: \mathbb{R}^2 \rightarrow \mathbb{R}^M$, wherein $f[x,y]$ gives the intensity of the pixel at position $[x,y]$. For a grayscale image, the pixel intensity is an integer in the range $[0,255]$. For a color image, ddd\ 
+Because images are digital, they are typically represented discretely as a 2D matrix of integer values which capture pixel intensity. Concretely, an image is represented as a function $f: \mathbb{R}^2 \rightarrow \mathbb{R}^M$, wherein $f[x,y]$ gives the intensity of the pixel at position $[x,y]$. For a grayscale image, the pixel intensity is an integer in the range $[0,255]$. For a color image,\
+
 $$f[x,y] = \begin{bmatrix}
     r[x,y] \\
     g[x,y] \\
     b[x,y]
-\end{bmatrix}$$\ such that $r, g, b: [a,b] \times [c,d] \rightarrow [0,255]$.
+\end{bmatrix}$$\ 
+
+such that $r, g, b: [a,b] \times [c,d] \rightarrow [0,255]$.
 
 We can think of the image matrix as having infinite width and height, centered at (0,0), as shown below. Note that (0,0) is the top-left corner of the image.
 
