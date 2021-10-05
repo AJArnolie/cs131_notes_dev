@@ -4,7 +4,7 @@ keywords: (insert comma-separated keywords here)
 order: 3 # Lecture number for 2020
 ---
 
-# CS 131 Lecture 3 Notes: Filters and Convolutions
+# CS 131 Lecture 3 Notes: Filtering
 
 **Authors:** AJ Arnolie, Andy Jin, Cynthia Liu, Edward Park, Daulet Tuleubayev, Jerry Wei
 
@@ -55,7 +55,9 @@ However, we typically only consider a finite region within this matrix for a spe
 
 Furthermore, we can plot images as a surface, such as the one shown below. The 2D plane indicates the coordinates of the images, and the vertical height indicates the intensity of each pixel.
 
-<p align="center"><img src="https://i.imgur.com/GHci7zw.png" width="800" /></p>
+<!---![](https://i.imgur.com/GHci7zw.png)--->
+<img src="https://i.imgur.com/GHci7zw.png" width="800"/>
+
 
 ### Overview of Filtering
 
@@ -82,7 +84,8 @@ $$g[n,m] = \frac{1}{9} \sum\limits_{k=-1}^{1}\sum\limits_{l=-1}^{1} f[n-k, m-l]$
 
 The moving average filter has the visual effect of slightly blurring the image; it smooths out the image and removes sharp features by averaging those pixels with neighboring values that have smaller intensity.
 
-![](https://i.imgur.com/Dp8ZGqc.png)
+<!---![](https://i.imgur.com/Dp8ZGqc.png)--->
+<img src="https://i.imgur.com/Dp8ZGqc.png" width="800"/>
 
 #### Filter Mask
 
@@ -108,7 +111,8 @@ $$g[n,m] = \begin{cases} 255, & f[n,m] > t \\ 0, & \text{otherwise}\end{cases}$$
 
 This image segmentation filter has the visual effect of transforming the image into contrasting dark and light regions, as seen below:
 
-![](https://i.imgur.com/oORn4FW.png)
+<!---![](https://i.imgur.com/oORn4FW.png)--->
+<img src="https://i.imgur.com/oORn4FW.png" width="800"/>
 
 ## 2. Properties of Linear Systems
 
@@ -144,13 +148,15 @@ In other words, if we shift the input f by some amount, then the output will als
 
 #### Is the moving average system shift invariant?
 
-We check this by looking at the defintions. We know that $f[n,m] \xrightarrow[]{S} g[n,m]$. We also know that $g[n,m] = \frac{1}{9} \sum_{k = - 1}^{1} \sum_{l = - 1}^{1} f[n-k,m-l]$.
+We check this by looking at the defintions. We know that $f[n,m] \xrightarrow[]{S} g[n,m]$. We also know that:
 
-We pass in a shifted version of $f$ and see that
+$$g[n,m] = \frac{1}{9} \sum_{k = - 1}^{1} \sum_{l = - 1}^{1} f[n-k,m-l]$$
+
+We pass in a shifted version of $f$ and see that:
 
 $$f[n - n_0,m-m_0] \xrightarrow[]{S} \frac{1}{9} \sum_{k = - 1}^{1} \sum_{l = - 1}^{1} f[(n-n_0)-k,(m-m_0)-l] = g[n-n_0,m-m_0]$$
 
-So we see that the moving average system *is* shift invariant.
+So, we see that the moving average system *is* shift invariant.
 
 ### Superposition
 
@@ -164,7 +170,8 @@ In other words, passing through a linear combination of two images through $S$, 
 
 Given this definition, we know that the moving average system is a linear system, while thresholding is not.
 
-Furthermore, we can define a Linear Shift-Invariant (LSI) system as a system that is both Shift-Invariant and follows the **Superposition Property**.
+<!---Shouldn't there be a separate section here for LSI?--->
+We can define a Linear Shift-Invariant (LSI) system as a system that is both Shift-Invariant and follows the **Superposition Property**.
 
 Additionally and critically, an LSI System is _completely specified by its impulse response_. The following section will discuss exactly what this statement means and how it is relevant in understanding how LSI Systems interact with images.
 
@@ -231,9 +238,10 @@ $$\delta_2[n,m] \overset{\mathcal{S}}\rightarrow h[n,m]$$
 Using these three properties, we can derive an equation that describes an output image $g$ produced by an LSI system solely in terms of an input image $f$ and a kernel $h$. 
 
 In order to do so, we must first imagine the input image $f$ as a sum of impulses or shifted $\delta_2$ functions. Let $f[n,m]$ represent a 3X3 input image, and let $\delta_2[n,m]$ represent our delta impulse function as described previously. As you can see below, for each pixel in our image, we produce a new shifted $\delta_2$ function multiplied the initial pixels value.
-\
-![](https://i.imgur.com/QQuILc2.png[/img])
-\
+
+<!---![](https://i.imgur.com/QQuILc2.png[/img])--->
+<img src="https://i.imgur.com/QQuILc2.png" width="800"/>
+
 \begin{align}
 f[n,m] &= f[0,0] \cdot\delta_2[n,m] + f[0,1] \cdot\delta_2[n,m-1] + ... + f[2,2] \cdot\delta_2[n-2,m-2]\\\\
 &= \sum_{k=-\infty}^\infty\sum_{l=-\infty}^\infty f[k,l]\cdot \delta_2[n-k,m-l]\\
@@ -269,20 +277,26 @@ In computer vision, most of the time we use convolution with 2D discrete signal.
 $$f[n,m] * h[n,m] = \sum\limits_{k=-\infty}^{\infty} \sum\limits_{l=-\infty}^{\infty} f[k, l] h[n-k, m-l]$$
 
 The meaning of the equation also can be explained graphically. When we want to compute the convolution at location (n, m), we need the input image $f$ as well as the impulse response $h$ which is exactly the  kernel mentioned in previous classes.
-![](https://i.imgur.com/sdWgUmz.png)
+
+<!---![](https://i.imgur.com/sdWgUmz.png)--->
+<img src="https://i.imgur.com/sdWgUmz.png" width="800"/>
 
 The following is the algorithm of computing convolution for 2D discrete values:
 1. To compute the convolution, first, we fold the kernel $h[k, l]$ to let the indexes become negative as $h[-k, -l]$. In other words, we flip the kernel both vertically and horizontally to form $h[-k, -l]$.
-![](https://i.imgur.com/Pd3JlWg.png)
+
+<!---![](https://i.imgur.com/Pd3JlWg.png)--->
+<img src="https://i.imgur.com/Pd3JlWg.png" width="800"/>
 
 2. We shift the folded kernel by (n, m) to obtain $h[n-k, m-l]$ and make all the values outside the kernel be zero. 
-![](https://i.imgur.com/TPjmLYV.png)
 
-
+<!---![](https://i.imgur.com/TPjmLYV.png)--->
+<img src="https://i.imgur.com/TPjmLYV.png" width="800"/>
 
 
 3. After that, we can multiply $h[n-k, m-l]$ by $f[k, l]$, which is overlapping the kernel and original input and then performing element-wise multiplication between the original input and the kernel in the cells within the neighborhood.
-![](https://i.imgur.com/zfgCLrg.png)
+
+<!---![](https://i.imgur.com/zfgCLrg.png)--->
+<img src="https://i.imgur.com/zfgCLrg.png" width="800"/>
 
 
 4. We sum up all the results to obtain the output value at (n, m).
@@ -319,7 +333,8 @@ Computers will only convolve finite support signals; that is to say that any $(n
 Therefore, having finite sizes, we can know that if we have an image with dimensions $N1$x$M1$ convolved with a kernel with dimensions $N2$x$M2$, that the output would have dimensions of 
 $(N1 + N2 - 1) \times (M1 + M2 - 1)$.
 
- ![](https://i.imgur.com/ese8Owm.webp?maxwidth=760&fidelity=grand)
+<!---![](https://i.imgur.com/ese8Owm.webp?maxwidth=760&fidelity=grand)--->
+<img src="https://i.imgur.com/ese8Owm.webp?maxwidth=760&fidelity=grand" width="800"/>
 
 To reach the dimensions of $(N1 + N2 - 1) \times (M1 + M2 - 1)$, we can imagine the worst edge case in which there is only a 1 pixel overlap between that image and the kernel for the convolution. 
 
@@ -345,7 +360,8 @@ $$f[n,m] ** h[n,m] = \sum_{k=-\infty}^{\infty} \sum_{l=-\infty}^{\infty} f[k,l] 
 
 As seen, correlations are equivalent to convolutions without the horizontal and vertical flipping of the kernel. However, due to the flipping, Convolutions and Correlations _**DO NOT**_ produce the same result.
 
-![](https://imgur.com/3qS4Dw8.png)
+<img src="https://imgur.com/3qS4Dw8.png" width="800"/>
+<!---![](https://imgur.com/3qS4Dw8.png)--->
 
 The Convolution of $f*g$ and the Correlation of $f**g$ are equivalent only when $g$ is symmetrical, as $g$ would remain unchanged after flipping. 
 
@@ -377,4 +393,5 @@ For a real life example, let us take the case of stereo vision, triangulating a 
 
 Imagine we have two optical sensors that are capturing a scene from slightly different points of view. To find the depth of a point in the scene, we must first know the location of the given point in both images. One way to achieve this is to take a position from one image and find a correlation in the second image, moving along a fixed axis, and the area where the correlation is the largest is the area with the greatest similarity.
 
-![](https://imgur.com/Snaa68Q.png)
+<img src="https://imgur.com/Snaa68Q.png" width="800"/>
+<!---![](https://imgur.com/Snaa68Q.png)--->
